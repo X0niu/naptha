@@ -83,6 +83,11 @@ function install_naptha_node() {
         echo "pip3 已安装"
     fi
 
+    # 安装 Poetry
+    echo "正在通过 apt 安装 Poetry..."
+    sudo apt-get install -y python3-poetry
+    echo "Poetry 安装完成"
+
     # 克隆 Git 仓库
     echo "正在克隆 Git 仓库..."
     git clone https://github.com/NapthaAI/node.git
