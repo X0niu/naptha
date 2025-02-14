@@ -81,15 +81,6 @@ function install_naptha_node() {
         echo ".env.example 文件不存在，无法复制为 .env"
     fi
 
-    # 修改 .env 文件中的 LAUNCH_DOCKER=false 为 LAUNCH_DOCKER=true
-    if [ -f .env ]; then
-        # 使用 sed 命令替换 LAUNCH_DOCKER=false 为 LAUNCH_DOCKER=true
-        sed -i 's/LAUNCH_DOCKER=false/LAUNCH_DOCKER=true/' .env
-        echo ".env 文件中的 LAUNCH_DOCKER 已修改为 true"
-    else
-        echo ".env 文件不存在，无法修改 LAUNCH_DOCKER"
-    fi
-
     # 执行 launch.sh
     if [ -f launch.sh ]; then
         echo "正在执行 launch.sh..."
