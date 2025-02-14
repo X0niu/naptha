@@ -66,6 +66,23 @@ function install_naptha_node() {
         echo "Docker Compose 已安装"
     fi
 
+    # 检查 Python3 和 pip 是否已安装
+    if ! command -v python3 &> /dev/null
+    then
+        echo "Python3 未安装，正在安装 Python3..."
+        sudo apt-get install -y python3
+    else
+        echo "Python3 已安装"
+    fi
+
+    if ! command -v pip3 &> /dev/null
+    then
+        echo "pip3 未安装，正在安装 pip3..."
+        sudo apt-get install -y python3-pip
+    else
+        echo "pip3 已安装"
+    fi
+
     # 克隆 Git 仓库
     echo "正在克隆 Git 仓库..."
     git clone https://github.com/NapthaAI/node.git
@@ -91,6 +108,10 @@ function install_naptha_node() {
 
     # 输出脚本路径
     echo "脚本保存路径：$SCRIPT_PATH"
+
+    # 提示用户按任意键返回主菜单
+    read -n 1 -s -r -p "按任意键返回主菜单..."
+    main_menu
 }
 
 # 调用主菜单
