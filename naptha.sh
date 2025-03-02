@@ -173,7 +173,7 @@ function install_naptha_node() {
 # 查看日志的函数
 function view_logs() {
     echo "正在查看日志..."
-    docker logs -f litellm  # 查看日志
+    docker logs -f node-rabbitmq  # 查看日志
     # 提示用户按任意键返回主菜单
     read -n 1 -s -r -p "按任意键返回主菜单..."
     main_menu
