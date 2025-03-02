@@ -13,7 +13,8 @@ function main_menu() {
         echo "退出脚本，请按键盘 ctrl + C 退出即可"
         echo "请选择要执行的操作:"
         echo "1. 安装 Naptha 节点"
-        echo "2. 退出"
+        echo "2. 删除 Naptha 节点"  # 新增删除节点的选项
+        echo "3. 查看 PRIVATE_KEY"  # 新增查看 PRIVATE_KEY 的选项
         read -p "请输入操作编号: " option
 
         case $option in
@@ -21,8 +22,10 @@ function main_menu() {
                 install_naptha_node
                 ;;
             2)
-                echo "退出脚本..."
-                exit 0
+                remove_naptha_node  # 调用删除节点的函数
+                ;;
+            3)
+                view_private_key  # 调用查看 PRIVATE_KEY 的函数
                 ;;
             *)
                 echo "无效的选项，请重新输入..."
@@ -31,6 +34,36 @@ function main_menu() {
         esac
     done
 }
+
+# 删除 Naptha 节点的函数
+function remove_naptha_node() {
+    echo "正在删除 Naptha 节点..."
+    bash docker-ctl.sh down
+    echo "Naptha 节点已删除"
+
+    # 提示用户按任意键返回主菜单
+    read -n 1 -s -r -p "按任意键返回主菜单..."
+    main_menu
+}
+
+# 查看 PRIVATE_KEY 的函数
+function view_private_key() {
+    echo "查看 PRIVATE_KEY..."
+    # 直接打开目录中的 .pem 文件
+    for pem_file in /root/node/*.pem; do
+        if [ -f "$pem_file" ]; then
+            echo "打开文件: $pem_file"
+            cat "$pem_file"  # 输出文件内容
+            echo "-----------------------------"
+        else
+            echo "没有找到 .pem 文件"
+        fi
+    done
+    # 提示用户按任意键返回主菜单
+    read -n 1 -s -r -p "按任意键返回主菜单..."
+    main_menu
+}
+
 
 # 安装 Naptha 节点的函数
 function install_naptha_node() {
