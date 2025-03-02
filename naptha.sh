@@ -135,6 +135,12 @@ function install_naptha_node() {
         curl -sSL https://install.python-poetry.org | python3 -
     fi
 
+    # 检查并删除已存在的 node 目录
+    if [ -d "node" ]; then
+        echo "目标目录 'node' 已存在，正在删除..."
+        rm -rf node
+    fi
+
     # 克隆 Git 仓库
     echo "正在克隆 Git 仓库..."
     git clone https://github.com/NapthaAI/node.git
