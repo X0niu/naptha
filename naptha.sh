@@ -13,8 +13,9 @@ function main_menu() {
         echo "退出脚本，请按键盘 ctrl + C 退出即可"
         echo "请选择要执行的操作:"
         echo "1. 安装 Naptha 节点"
-        echo "2. 删除 Naptha 节点"  # 新增删除节点的选项
-        echo "3. 查看 PRIVATE_KEY"  # 新增查看 PRIVATE_KEY 的选项
+        echo "2. 删除 Naptha 节点"  
+        echo "3. 查看 PRIVATE_KEY"   
+        echo "4. 查看日志" 
         read -p "请输入操作编号: " option
 
         case $option in
@@ -26,6 +27,9 @@ function main_menu() {
                 ;;
             3)
                 view_private_key  # 调用查看 PRIVATE_KEY 的函数
+                ;;
+            4)
+                view_logs  # 调用查看日志的函数
                 ;;
             *)
                 echo "无效的选项，请重新输入..."
@@ -161,6 +165,15 @@ function install_naptha_node() {
     # 输出脚本路径
     echo "脚本保存路径：$SCRIPT_PATH"
 
+    # 提示用户按任意键返回主菜单
+    read -n 1 -s -r -p "按任意键返回主菜单..."
+    main_menu
+}
+
+# 查看日志的函数
+function view_logs() {
+    echo "正在查看日志..."
+    docker logs -f litellm  # 查看日志
     # 提示用户按任意键返回主菜单
     read -n 1 -s -r -p "按任意键返回主菜单..."
     main_menu
