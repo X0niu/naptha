@@ -83,10 +83,20 @@ function install_naptha_node() {
         echo "pip3 已安装"
     fi
 
-    # 安装 Poetry
-    echo "正在通过 apt 安装 Poetry..."
-    sudo apt-get install -y python3-poetry
-    echo "Poetry 安装完成"
+    # 检查 Poetry 是否已安装及版本
+    if command -v poetry &> /dev/null
+    then
+        POETRY_VERSION=$(poetry --version | awk '{print \$2}')
+        if [[ $(echo "$POETRY_VERSION < 1.2" | bc -l) -eq 1 ]]; then
+            echo "Poetry 版本低于 1.2，正在更新 Poetry..."
+            curl -sSL https://install.python-poetry.org | python3 -
+        else
+            echo "Poetry 已安装，版本为 $POETRY_VERSION"
+        fi
+    else
+        echo "Poetry 未安装，正在安装 Poetry..."
+        curl -sSL https://install.python-poetry.org | python3 -
+    fi
 
     # 克隆 Git 仓库
     echo "正在克隆 Git 仓库..."
@@ -97,10 +107,14 @@ function install_naptha_node() {
 
     # 复制 .env.example 为 .env
     if [ -f .env.example ]; then
-        cp .env.example .env
-        echo ".env.example 文件已复制为 .env"
+    cp .env.example .env
+    echo ".env.example 文件已复制为 .env"
+
+    # 修改 .env 文件中的 LAUNCH_DOCKER=false 为 LAUNCH_DOCKER=true
+    sed -i 's/LAUNCH_DOCKER=false/LAUNCH_DOCKER=true/' .env
+    echo "已将 .env 文件中的 LAUNCH_DOCKER 设置为 true"
     else
-        echo ".env.example 文件不存在，无法复制为 .env"
+    echo ".env.example 文件不存在，无法复制为 .env"
     fi
 
     # 执行 launch.sh
