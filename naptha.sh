@@ -190,7 +190,15 @@ function install_naptha_node() {
 # 查看日志的函数
 function view_logs() {
     echo "正在查看日志..."
-    docker logs -f node-rabbitmq  # 查看日志
+    
+    # 进入 node 目录
+    if cd node; then
+        # 使用 docker-compose 查看日志，显示最后 300 行并实时跟踪
+        docker-compose logs -f --tail=300
+    else
+        echo "无法进入 node 目录，请确保 node 目录存在。"
+    fi
+
     # 提示用户按任意键返回主菜单
     read -n 1 -s -r -p "按任意键返回主菜单..."
     main_menu
