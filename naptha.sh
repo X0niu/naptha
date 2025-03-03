@@ -120,6 +120,14 @@ function install_naptha_node() {
         echo "pip3 已安装"
     fi
 
+    # 检查并安装 python3-venv
+    if ! dpkg -l | grep -q python3-venv; then
+    echo "python3-venv 未安装，正在安装 python3-venv..."
+    sudo apt-get install -y python3-venv
+    else
+    echo "python3-venv 已安装"
+    fi
+
     # 检查 Poetry 是否已安装及版本
     if command -v poetry &> /dev/null
     then
