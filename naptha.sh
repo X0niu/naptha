@@ -185,9 +185,9 @@ function install_naptha_node() {
         # 修改 .env 文件中的 LAUNCH_DOCKER=false 为 LAUNCH_DOCKER=true
         sed -i 's/LAUNCH_DOCKER=false/LAUNCH_DOCKER=true/' .env
         # 修改 .env 文件中的 HF_HOME=/home/<youruser>/.cache/huggingface 为 HF_HOME=/home/root/.cache/huggingface
-        sed -i 's|HF_HOME=/home/<youruser>/.cache/huggingface|HF_HOME=/home/root/.cache/huggingface|' .env
+        sed -i 's|HF_HOME=/home/<youruser>/.cache/huggingface|HF_HOME=/root/.cache/huggingface|' .env
         echo "已将 .env 文件中的 LAUNCH_DOCKER 设置为 true"
-        echo "已将 .env 文件中的 HF_HOME 设置为 /home/root/.cache/huggingface"
+        echo "已将 .env 文件中的 HF_HOME 设置为 /root/.cache/huggingface"
     else
         echo ".env.example 文件不存在，无法复制为 .env"
     fi
