@@ -16,6 +16,7 @@ function main_menu() {
         echo "2. 删除 Naptha 节点"  
         echo "3. 查看 PRIVATE_KEY"   
         echo "4. 查看日志" 
+        echo "5. 退出脚本"
         read -p "请输入操作编号: " option
 
         case $option in
@@ -31,6 +32,10 @@ function main_menu() {
             4)
                 view_logs  # 调用查看日志的函数
                 ;;
+            5)
+                echo "正在退出脚本..."
+                exit 0  # 退出脚本
+                ;;
             *)
                 echo "无效的选项，请重新输入..."
                 sleep 2
@@ -42,7 +47,20 @@ function main_menu() {
 # 删除 Naptha 节点的函数
 function remove_naptha_node() {
     echo "正在删除 Naptha 节点..."
-    bash docker-ctl.sh down
+
+    # 停止并删除 Docker 容器
+    echo "正在停止并删除 Docker 容器..."
+    docker stop node-pgvector node-ollama node-rabbitmq litellm node-app 2>/dev/null
+    docker rm node-pgvector node-ollama node-rabbitmq litellm node-app 2>/dev/null
+
+    # 执行 docker-ctl.sh down
+    if [ -f "docker-ctl.sh" ]; then
+        echo "正在执行 docker-ctl.sh down..."
+        bash docker-ctl.sh down
+    else
+        echo "docker-ctl.sh 文件不存在，跳过执行"
+    fi
+
     echo "Naptha 节点已删除"
 
     # 提示用户按任意键返回主菜单
