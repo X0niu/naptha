@@ -68,6 +68,24 @@ function view_private_key() {
     main_menu
 }
 
+# 创建虚拟环境并安装依赖
+function create_virtualenv() {
+    echo "正在创建 Python 虚拟环境并安装依赖..."
+    
+    # 创建虚拟环境
+    python3 -m venv .venv
+    
+    # 激活虚拟环境
+    source .venv/bin/activate
+    
+    # 升级 pip
+    pip install --upgrade pip
+    
+    # 安装所需依赖
+    pip install docker requests
+    
+    echo "虚拟环境创建完成，依赖安装成功！"
+}
 
 # 安装 Naptha 节点的函数
 function install_naptha_node() {
@@ -122,16 +140,16 @@ function install_naptha_node() {
 
     # 检查并安装 python3-venv
     if ! dpkg -l | grep -q python3-venv; then
-    echo "python3-venv 未安装，正在安装 python3-venv..."
-    sudo apt-get install -y python3-venv
+        echo "python3-venv 未安装，正在安装 python3-venv..."
+        sudo apt-get install -y python3-venv
     else
-    echo "python3-venv 已安装"
+        echo "python3-venv 已安装"
     fi
 
     # 检查 Poetry 是否已安装及版本
     if command -v poetry &> /dev/null
     then
-        POETRY_VERSION=$(poetry --version | awk '{print \$2}')
+        POETRY_VERSION=$(poetry --version | awk '{print \\$2}')
         if [[ $(echo "$POETRY_VERSION < 1.2" | bc -l) -eq 1 ]]; then
             echo "Poetry 版本低于 1.2，正在更新 Poetry..."
             curl -sSL https://install.python-poetry.org | python3 -
@@ -156,24 +174,27 @@ function install_naptha_node() {
     # 进入克隆的目录
     cd node
 
+    # 创建虚拟环境并安装依赖
+    create_virtualenv
+
     # 复制 .env.example 为 .env
     if [ -f .env.example ]; then
-    cp .env.example .env
-    echo ".env.example 文件已复制为 .env"
+        cp .env.example .env
+        echo ".env.example 文件已复制为 .env"
 
-    # 修改 .env 文件中的 LAUNCH_DOCKER=false 为 LAUNCH_DOCKER=true
-    sed -i 's/LAUNCH_DOCKER=false/LAUNCH_DOCKER=true/' .env
-    # 修改 .env 文件中的 HF_HOME=/home/<youruser>/.cache/huggingface 为 HF_HOME=/home/root/.cache/huggingface
-    sed -i 's|HF_HOME=/home/<youruser>/.cache/huggingface|HF_HOME=/home/root/.cache/huggingface|' .env
-    echo "已将 .env 文件中的 LAUNCH_DOCKER 设置为 true"
-    echo "已将 .env 文件中的 HF_HOME 设置为 /home/root/.cache/huggingface"
+        # 修改 .env 文件中的 LAUNCH_DOCKER=false 为 LAUNCH_DOCKER=true
+        sed -i 's/LAUNCH_DOCKER=false/LAUNCH_DOCKER=true/' .env
+        # 修改 .env 文件中的 HF_HOME=/home/<youruser>/.cache/huggingface 为 HF_HOME=/home/root/.cache/huggingface
+        sed -i 's|HF_HOME=/home/<youruser>/.cache/huggingface|HF_HOME=/home/root/.cache/huggingface|' .env
+        echo "已将 .env 文件中的 LAUNCH_DOCKER 设置为 true"
+        echo "已将 .env 文件中的 HF_HOME 设置为 /home/root/.cache/huggingface"
     else
-    echo ".env.example 文件不存在，无法复制为 .env"
+        echo ".env.example 文件不存在，无法复制为 .env"
     fi
 
     # 执行 launch.sh
     if [ -f launch.sh ]; then
-        echo "正在执行 launch.sh..."
+        echo "正在.sh..."
         bash launch.sh
     else
         echo "launch.sh 文件不存在，无法执行"
