@@ -186,8 +186,8 @@ function install_naptha_node() {
     fi
 
     # 克隆 Git 仓库
-    echo "正在克隆 Git 仓库..."
-    git clone https://github.com/NapthaAI/node.git
+    #echo "正在克隆 Git 仓库..."
+    #git clone https://github.com/NapthaAI/node.git
 
     # 进入克隆的目录
     cd node
